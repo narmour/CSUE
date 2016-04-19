@@ -23,6 +23,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
+
+	void takeDamage(float damage);
+
+
+protected:
+	//character health
+	UPROPERTY(EditAnywhere, Category = "Gameplay")
+	float myHealth;
+
 	
 	
 };

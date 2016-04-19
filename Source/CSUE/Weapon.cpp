@@ -46,6 +46,7 @@ void AWeapon::WeaponTrace(){
 	if (myFPChar) {
 		forward = myFPChar->GetFirstPersonCameraComponent()->GetForwardVector();
 	}
+	//spray patterns?
     FVector endPos = forward.GetSafeNormal() * weaponRange;
     
     
@@ -57,11 +58,10 @@ void AWeapon::WeaponTrace(){
     //check our fire ray against all objects with collision
     FHitResult Hit(ForceInit);
     GetWorld()->LineTraceSingleByObjectType(Hit, startPos, endPos, FCollisionObjectQueryParams::AllObjects, traceParams);
-    
     if(Hit.bBlockingHit){
         auto hitEnemy = Cast<ACSUEAIEnemyCharacter>(Hit.GetActor());
         if(hitEnemy){
-            UE_LOG(LogTemp,Warning,TEXT("HIT ENEMY"));
+			hitEnemy->takeDamage(weaponDamage);
         }
         
     }

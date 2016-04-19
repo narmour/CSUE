@@ -10,6 +10,9 @@ ACSUEAICharacter::ACSUEAICharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	myHealth = 100.f;
+
+
 }
 
 // Called when the game starts or when spawned
@@ -31,5 +34,13 @@ void ACSUEAICharacter::SetupPlayerInputComponent(class UInputComponent* InputCom
 {
 	Super::SetupPlayerInputComponent(InputComponent);
 
+}
+
+void ACSUEAICharacter::takeDamage(float damage) {
+	myHealth -= damage;
+	UE_LOG(LogTemp, Warning, TEXT("TOOK A HIT,   %f"), myHealth);
+	//if we go negative reset back to 0
+	if (myHealth < 0)
+		myHealth = 0;
 }
 
