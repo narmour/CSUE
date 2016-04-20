@@ -66,6 +66,8 @@ protected:
 	
 	/** Fires a projectile. */
 	void OnFire();
+    void OnStopFire();
+    bool bShooting;
 
 	/** Handles moving forward/backward */
 	void MoveForward(float Val);

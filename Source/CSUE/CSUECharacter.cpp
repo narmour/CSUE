@@ -48,6 +48,9 @@ ACSUECharacter::ACSUECharacter()
 
 	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P are set in the
 	// derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+    
+    
+    bShooting = false;
 }
 
 void ACSUECharacter::BeginPlay(){
@@ -60,6 +63,7 @@ void ACSUECharacter::BeginPlay(){
             SpawnParams.Owner = this;
             SpawnParams.Instigator = Instigator;
             FRotator Rotation(0.f,0.f,-90.f);
+            //myWeapon = new AWeapon(1.f,99999.f);
             myWeapon = World->SpawnActor<AWeapon>(this->WeaponClass,FVector::ZeroVector,Rotation,SpawnParams);
             if(myWeapon){
                 UE_LOG(LogTemp,Warning,TEXT("ATTATCHED WEAPON"));
@@ -90,6 +94,7 @@ void ACSUECharacter::SetupPlayerInputComponent(class UInputComponent* InputCompo
 	if( EnableTouchscreenMovement(InputComponent) == false )
 	{
 		InputComponent->BindAction("Fire", IE_Pressed, this, &ACSUECharacter::OnFire);
+        InputComponent->BindAction("Fire",IE_Released,this,&ACSUECharacter::OnStopFire);
 	}
 	
 	InputComponent->BindAxis("MoveForward", this, &ACSUECharacter::MoveForward);
@@ -106,9 +111,9 @@ void ACSUECharacter::SetupPlayerInputComponent(class UInputComponent* InputCompo
 
 void ACSUECharacter::OnFire()
 {
-    
-    if(myWeapon){
-        myWeapon->WeaponTrace();
+    bShooting = true;
+    if(myWeapon &&bShooting){
+        myWeapon->OnStartFire();
     }
     /*
 	// try and fire a projectile
@@ -144,6 +149,13 @@ void ACSUECharacter::OnFire()
 	}
      */
 
+}
+
+void ACSUECharacter::OnStopFire(){
+    bShooting = false;
+    if(myWeapon && !bShooting){
+        myWeapon->OnStopFire();
+    }
 }
 
 void ACSUECharacter::BeginTouch(const ETouchIndex::Type FingerIndex, const FVector Location)

@@ -6,21 +6,43 @@
 #include "Weapon.h"
 
 
-// Sets default values
-AWeapon::AWeapon()
+
+
+//default construct
+AWeapon::AWeapon(){
+    PrimaryActorTick.bCanEverTick = true;
+    WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("base CLASS"));
+    RootComponent = WeaponMesh;
+    
+    //init shooting audio loop
+    ShootAC = nullptr;
+
+    weaponRange = 9999.f;
+    weaponDamage = 1.f;
+    weaponFireRate = .05f;
+}
+
+
+// Sets values for child classes
+AWeapon::AWeapon(float wR,float wD,float wFR)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
     WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("base CLASS"));
     RootComponent = WeaponMesh;
     
-    weaponRange = 999999.f;
-    weaponDamage = 1.f;
+    //init shooting audio loop
+    ShootAC = nullptr;
+    
+    
+    //weapon stats
+    weaponRange = wR;
+    weaponDamage = wD;
+    weaponFireRate = wFR;
+    
+    
 }
 
-AWeapon::AWeapon(float wDamage){
-    weaponDamage = wDamage;
-}
 
 // Called when the game starts or when spawned
 void AWeapon::BeginPlay()
@@ -35,6 +57,45 @@ void AWeapon::Tick( float DeltaTime )
 	Super::Tick( DeltaTime );
 
 }
+
+UAudioComponent* AWeapon::PlayWeaponSound(USoundCue *Sound){
+    UAudioComponent *AC = NULL;
+    
+    if (Sound) {
+        AC = UGameplayStatics::PlaySoundAttached(Sound, RootComponent);
+    }
+    return AC;
+}
+
+UParticleSystemComponent * AWeapon::muzzleFlash(UParticleSystem * particle)
+{
+    UParticleSystemComponent *flash = NULL;
+    
+    if (particle) {
+        flash = UGameplayStatics::SpawnEmitterAttached(particle,RootComponent,TEXT("MuzzleFlashSocket"));
+        
+    }
+    return flash;
+}
+
+void AWeapon::OnStartFire()
+{
+    ShootAC = PlayWeaponSound(FireLoopSound);
+    muzzlePSC = muzzleFlash(MuzzleFX);
+    GetWorldTimerManager().SetTimer(shootingTimer,this,&AWeapon::WeaponTrace,weaponFireRate,true);
+
+    WeaponTrace();
+    
+}
+
+void AWeapon::OnStopFire()
+{
+    GetWorldTimerManager().ClearTimer(shootingTimer);
+    ShootAC->Deactivate();
+    muzzlePSC->DeactivateSystem();
+}
+
+
 
 void AWeapon::WeaponTrace(){
 	//cast pawn to char
@@ -59,6 +120,8 @@ void AWeapon::WeaponTrace(){
     FHitResult Hit(ForceInit);
     GetWorld()->LineTraceSingleByObjectType(Hit, startPos, endPos, FCollisionObjectQueryParams::AllObjects, traceParams);
     if(Hit.bBlockingHit){
+        //spawn hit effect particle
+        UGameplayStatics::SpawnEmitterAtLocation(Hit.GetActor(), HitFX, Hit.ImpactPoint);
         auto hitEnemy = Cast<ACSUEAIEnemyCharacter>(Hit.GetActor());
         if(hitEnemy){
 			hitEnemy->takeDamage(weaponDamage);
