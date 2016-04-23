@@ -10,6 +10,12 @@ class ACSUEGameMode : public AGameMode
 
 public:
 	ACSUEGameMode();
+
+	//GameManager will call these functions
+	void startRound();
+	void endRound();
+
+	//HUD    will eventually get to this
 };
 
 

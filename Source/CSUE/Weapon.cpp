@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CSUE.h"
-#include "CSUEAIEnemyCharacter.h"
 #include "CSUECharacter.h"
 #include "Weapon.h"
 
@@ -121,8 +120,10 @@ void AWeapon::WeaponTrace(){
     GetWorld()->LineTraceSingleByObjectType(Hit, startPos, endPos, FCollisionObjectQueryParams::AllObjects, traceParams);
     if(Hit.bBlockingHit){
         //spawn hit effect particle
-        UGameplayStatics::SpawnEmitterAtLocation(Hit.GetActor(), HitFX, Hit.ImpactPoint);
-        auto hitEnemy = Cast<ACSUEAIEnemyCharacter>(Hit.GetActor());
+		if (Hit.GetActor()) {
+			UGameplayStatics::SpawnEmitterAtLocation(Hit.GetActor(), HitFX, Hit.ImpactPoint);
+		}
+		auto hitEnemy = Cast<ACSUETerrorist>(Hit.GetActor());
         if(hitEnemy){
 			hitEnemy->takeDamage(weaponDamage);
         }

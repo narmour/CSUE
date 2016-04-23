@@ -28,6 +28,9 @@ class ACSUECharacter : public ACharacter
     //give char our weapon class
     UPROPERTY(EditAnywhere,Category = "Weapon")
     TSubclassOf<AWeapon> WeaponClass;
+
+	//Team character is on, hardcoded for CT, want to set with HUD?
+	TSubclassOf<ACSUECounterTerrorist> CT;
     
     //instance of the weapon
     AWeapon *myWeapon;

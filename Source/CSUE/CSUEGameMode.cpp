@@ -14,4 +14,6 @@ ACSUEGameMode::ACSUEGameMode()
 
 	// use our custom HUD class
 	HUDClass = ACSUEHUD::StaticClass();
+
+	UE_LOG(LogTemp, Warning, TEXT("HI FROM GAMEMODE"));
 }
