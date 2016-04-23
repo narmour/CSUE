@@ -47,6 +47,8 @@ AWeapon::AWeapon(float wR,float wD,float wFR)
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+    enemyType = Cast<ACSUECharacter>(myPawn)->getEnemyTeam();
+
 	
 }
 
@@ -122,15 +124,17 @@ void AWeapon::WeaponTrace(){
         //spawn hit effect particle
 		if (Hit.GetActor()) {
 			UGameplayStatics::SpawnEmitterAtLocation(Hit.GetActor(), HitFX, Hit.ImpactPoint);
-		}
-		auto hitEnemy = Cast<ACSUETerrorist>(Hit.GetActor());
-        if(hitEnemy){
-			hitEnemy->takeDamage(weaponDamage);
+            auto hitEnemy = Cast<ACSUEAICharacter>(Hit.GetActor());
+            if(enemyType == FString(TEXT("CT")))
+                hitEnemy = Cast<ACSUECounterTerrorist>(Hit.GetActor());
+            else
+                hitEnemy = Cast<ACSUETerrorist>(Hit.GetActor());
+            if(hitEnemy){
+                hitEnemy->takeDamage(weaponDamage);
+            }
         }
         
     }
-    
-    
     
 }
 

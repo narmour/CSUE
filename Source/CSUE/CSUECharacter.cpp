@@ -4,6 +4,8 @@
 #include "CSUECharacter.h"
 #include "CSUEProjectile.h"
 #include "Animation/AnimInstance.h"
+#include "CSUETerrorist.h"
+#include "CSUECounterTerrorist.h"
 #include "GameFramework/InputSettings.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
@@ -259,4 +261,16 @@ bool ACSUECharacter::EnableTouchscreenMovement(class UInputComponent* InputCompo
 		InputComponent->BindTouch(EInputEvent::IE_Repeat, this, &ACSUECharacter::TouchUpdate);
 	}
 	return bResult;
+}
+
+FString ACSUECharacter::getEnemyTeam(){
+    //if character is on CT, enemy is T
+    if(myTeam == FString(TEXT("CT")))
+        return FString(TEXT("T"));
+    
+    //if character is on T, enemy is CT
+    else
+        return FString(TEXT("CT"));
+
+    
 }

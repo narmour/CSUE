@@ -30,8 +30,7 @@ class ACSUECharacter : public ACharacter
     TSubclassOf<AWeapon> WeaponClass;
 
 	//Team character is on, hardcoded for CT, want to set with HUD?
-	TSubclassOf<ACSUECounterTerrorist> CT;
-    
+    FString myTeam = FString(TEXT("CT"));
     //instance of the weapon
     AWeapon *myWeapon;
     
@@ -63,6 +62,10 @@ public:
 	/** AnimMontage to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	class UAnimMontage* FireAnimation;
+    
+    //function to return enemy type so weapon knows who the bad guys are
+    FString getEnemyTeam();
+
     
 
 protected:

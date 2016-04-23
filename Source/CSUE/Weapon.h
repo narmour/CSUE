@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "Engine.h"
+#include "CSUEAICharacter.h"
 #include "CSUETerrorist.h"
 #include "CSUECounterTerrorist.h"
 #include "Weapon.generated.h"
@@ -51,6 +52,8 @@ public:
     void OnStopFire();
     void WeaponTrace();
     FTimerHandle shootingTimer;
+    //subclass to only apply damage to enemy type of myPawn
+    FString enemyType;
     
     APawn *myPawn;
 	
