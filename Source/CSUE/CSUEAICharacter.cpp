@@ -19,6 +19,23 @@ ACSUEAICharacter::ACSUEAICharacter()
 void ACSUEAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
+    if(this->weaponType){
+        UWorld *World = GetWorld();
+        if(World){
+            FActorSpawnParameters SpawnParams;
+            SpawnParams.Owner = this;
+            SpawnParams.Instigator = Instigator;
+            FRotator Rotation(0.f,0.f,-90.f);
+            //myWeapon = new AWeapon(1.f,99999.f);
+            myWeapon = World->SpawnActor<AWeapon>(this->weaponType,FVector::ZeroVector,Rotation,SpawnParams);
+            if(myWeapon){
+                UE_LOG(LogTemp,Warning,TEXT("ATTATCHED WEAPON"));
+                myWeapon->WeaponMesh->AttachTo(Mesh3P,TEXT("gun"),EAttachLocation::SnapToTargetIncludingScale,true);
+                myWeapon->myPawn = this;
+            }
+        }
+    }
+
 	
 }
 

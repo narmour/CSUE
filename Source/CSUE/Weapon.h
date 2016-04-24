@@ -4,9 +4,6 @@
 
 #include "GameFramework/Actor.h"
 #include "Engine.h"
-#include "CSUEAICharacter.h"
-#include "CSUETerrorist.h"
-#include "CSUECounterTerrorist.h"
 #include "Weapon.generated.h"
 
 UCLASS()

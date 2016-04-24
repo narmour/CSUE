@@ -2,7 +2,10 @@
 
 #include "CSUE.h"
 #include "CSUECharacter.h"
+//#include "CSUEAICharacter.h"
 #include "Weapon.h"
+#include "CSUETerrorist.h"
+#include "CSUECounterTerrorist.h"
 
 
 
@@ -124,14 +127,18 @@ void AWeapon::WeaponTrace(){
         //spawn hit effect particle
 		if (Hit.GetActor()) {
 			UGameplayStatics::SpawnEmitterAtLocation(Hit.GetActor(), HitFX, Hit.ImpactPoint);
-            auto hitEnemy = Cast<ACSUEAICharacter>(Hit.GetActor());
-            if(enemyType == FString(TEXT("CT")))
-                hitEnemy = Cast<ACSUECounterTerrorist>(Hit.GetActor());
-            else
-                hitEnemy = Cast<ACSUETerrorist>(Hit.GetActor());
-            if(hitEnemy){
-                hitEnemy->takeDamage(weaponDamage);
+            //auto hitEnemy = Cast<ACSUEAICharacter>(Hit.GetActor());
+            if(enemyType == FString(TEXT("CT"))){
+                auto hitEnemy = Cast<ACSUECounterTerrorist>(Hit.GetActor());
+                if(hitEnemy)
+                    hitEnemy->takeDamage(weaponDamage);
             }
+            else{
+                auto hitEnemy = Cast<ACSUETerrorist>(Hit.GetActor());
+                if(hitEnemy)
+                    hitEnemy->takeDamage(weaponDamage);
+            }
+            
         }
         
     }

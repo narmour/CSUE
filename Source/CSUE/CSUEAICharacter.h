@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
+#include "Weapon.h"
 #include "GameFramework/Character.h"
 #include "CSUEAICharacter.generated.h"
 
@@ -31,6 +31,14 @@ protected:
 	//character health
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
 	float myHealth;
+    
+    UPROPERTY(EditAnywhere,Category = "Weapon")
+    TSubclassOf<AWeapon>weaponType;
+    
+    AWeapon *myWeapon;
+    
+    UPROPERTY(EditAnywhere, Category="Mesh")
+    class USkeletalMeshComponent* Mesh3P;
 
 	
 	
