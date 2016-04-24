@@ -26,6 +26,6 @@ void ACSUEGameMode::BeginPlay(){
 void ACSUEGameMode::startRound(){
     totalRoundsPlayed +=1;
     
-    myManager->
+   // myManager->
     
 }

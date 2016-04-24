@@ -36,6 +36,6 @@ void ACSUEGameManager::initTeams(){
 void ACSUEGameManager::killT(){
     tAlive-=1;
     
-    if(tAlive)
+    //if(tAlive)
 }
 
