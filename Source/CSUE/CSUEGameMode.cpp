@@ -15,5 +15,17 @@ ACSUEGameMode::ACSUEGameMode()
 	// use our custom HUD class
 	HUDClass = ACSUEHUD::StaticClass();
 
-	UE_LOG(LogTemp, Warning, TEXT("HI FROM GAMEMODE"));
+}
+
+void ACSUEGameMode::BeginPlay(){
+    UE_LOG(LogTemp, Warning, TEXT("HI FROM GAMEMODE BEGINPLAY"));
+    startRound();
+
+}
+
+void ACSUEGameMode::startRound(){
+    totalRoundsPlayed +=1;
+    
+    myManager->
+    
 }

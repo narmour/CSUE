@@ -16,6 +16,8 @@ ACSUEGameManager::ACSUEGameManager()
 void ACSUEGameManager::BeginPlay()
 {
 	Super::BeginPlay();
+    
+    
 	
 }
 
@@ -24,5 +26,16 @@ void ACSUEGameManager::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
 
+}
+
+void ACSUEGameManager::initTeams(){
+    ctAlive = ctTeam.Num();
+    tAlive = tTeam.Num();
+}
+
+void ACSUEGameManager::killT(){
+    tAlive-=1;
+    
+    if(tAlive)
 }
 

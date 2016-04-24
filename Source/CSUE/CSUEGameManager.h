@@ -21,6 +21,13 @@ public:
 	
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
+    
+    //sets tAlive and ctAlive, called at the start of every round
+    void initTeams();
+    
+    //decrement tAlive/ctAlive check for round end, called by Terrorist/CT classes.
+    void killT();
+    void killCT();
 
 
 private:
@@ -29,6 +36,10 @@ private:
     TArray<ACSUETerrorist*> tTeam;
     UPROPERTY(EditAnywhere,Category ="Teams")
     TArray<ACSUECounterTerrorist*> ctTeam;
+    
+    //Keeps track of num alive for each team.
+    int32 tAlive;
+    int32 ctAlive;
 
 	
 	
