@@ -2,7 +2,7 @@
 
 #include "CSUE.h"
 #include "CSUECharacter.h"
-//#include "CSUEAICharacter.h"
+#include "CSUEAICharacter.h"
 #include "Weapon.h"
 #include "CSUETerrorist.h"
 #include "CSUECounterTerrorist.h"
@@ -50,7 +50,16 @@ AWeapon::AWeapon(float wR,float wD,float wFR)
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-    enemyType = Cast<ACSUECharacter>(myPawn)->getEnemyTeam();
+    auto playerChar = Cast<ACSUECharacter>(myPawn);
+    //check if the weapon is equiped by player char, if not, get enemy type from AICHAR
+    if(playerChar)
+        enemyType =playerChar->getEnemyTeam();
+    else{
+        auto aiChar = Cast<ACSUEAICharacter>(myPawn);
+        enemyType = aiChar->getEnemyTeam();
+        //pure virtual works, doope
+        UE_LOG(LogTemp,Warning,TEXT("%s"),*enemyType);
+    }
 
 	
 }
@@ -127,16 +136,10 @@ void AWeapon::WeaponTrace(){
         //spawn hit effect particle
 		if (Hit.GetActor()) {
 			UGameplayStatics::SpawnEmitterAtLocation(Hit.GetActor(), HitFX, Hit.ImpactPoint);
-            //auto hitEnemy = Cast<ACSUEAICharacter>(Hit.GetActor());
-            if(enemyType == FString(TEXT("CT"))){
-                auto hitEnemy = Cast<ACSUECounterTerrorist>(Hit.GetActor());
-                if(hitEnemy)
-                    hitEnemy->takeDamage(weaponDamage);
-            }
-            else{
-                auto hitEnemy = Cast<ACSUETerrorist>(Hit.GetActor());
-                if(hitEnemy)
-                    hitEnemy->takeDamage(weaponDamage);
+            //if we hit an enemy, deal damage
+            auto hitEnemy = Cast<ACSUEAICharacter>(Hit.GetActor());
+            if(hitEnemy && enemyType != hitEnemy->getEnemyTeam()){
+                hitEnemy->takeDamage(weaponDamage);
             }
             
         }

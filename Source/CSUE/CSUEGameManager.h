@@ -3,7 +3,8 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-//#include "CSUEAIEnemyCharacter.h"
+#include "CSUETerrorist.h"
+#include "CSUECounterTerrorist.h"
 #include "CSUEGameManager.generated.h"
 
 UCLASS()
@@ -23,8 +24,11 @@ public:
 
 
 private:
-	//playerteam and enemyteam
-	//TArray<ACSUEAIEnemyCharacter*> enemyTeam;
+	//T AND CT TEAMS
+    UPROPERTY(EditAnywhere,Category ="Teams")
+    TArray<ACSUETerrorist*> tTeam;
+    UPROPERTY(EditAnywhere,Category ="Teams")
+    TArray<ACSUECounterTerrorist*> ctTeam;
 
 	
 	

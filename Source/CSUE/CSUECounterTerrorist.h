@@ -13,7 +13,13 @@ class CSUE_API ACSUECounterTerrorist : public ACSUEAICharacter
 {
 	GENERATED_BODY()
 	
-	
-	
+public:
+    //constructor
+    //ACSUECounterTerrorist();
+    
+    virtual FString getEnemyTeam() override;
+    
+private:
+    FString enemyTeam = FString(TEXT("T"));
 	
 };

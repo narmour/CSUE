@@ -15,6 +15,8 @@ ACSUEAICharacter::ACSUEAICharacter()
 
 }
 
+
+
 // Called when the game starts or when spawned
 void ACSUEAICharacter::BeginPlay()
 {
@@ -30,7 +32,7 @@ void ACSUEAICharacter::BeginPlay()
             myWeapon = World->SpawnActor<AWeapon>(this->weaponType,FVector::ZeroVector,Rotation,SpawnParams);
             if(myWeapon){
                 UE_LOG(LogTemp,Warning,TEXT("ATTATCHED WEAPON"));
-                myWeapon->WeaponMesh->AttachTo(Mesh3P,TEXT("gun"),EAttachLocation::SnapToTargetIncludingScale,true);
+                myWeapon->WeaponMesh->AttachTo(this->GetMesh(),TEXT("GUN"),EAttachLocation::SnapToTargetIncludingScale,true);
                 myWeapon->myPawn = this;
             }
         }

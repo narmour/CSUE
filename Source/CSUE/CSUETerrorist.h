@@ -12,6 +12,15 @@ UCLASS()
 class CSUE_API ACSUETerrorist : public ACSUEAICharacter
 {
 	GENERATED_BODY()
+
+
+public:
+    
+    virtual FString getEnemyTeam() override;
+    
+private:
+    FString enemyTeam = FString(TEXT("CT"));
+
 	
 	
 	

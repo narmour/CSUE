@@ -4,8 +4,8 @@
 #include "Weapon.h"
 #include "GameFramework/Character.h"
 #include "CSUEAICharacter.generated.h"
-
-UCLASS()
+//make this an abstract class
+UCLASS(abstract)
 class CSUE_API ACSUEAICharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -25,6 +25,9 @@ public:
 
 
 	void takeDamage(float damage);
+    
+    //virtual to get enemyType for Weapon class
+    virtual FString getEnemyTeam() PURE_VIRTUAL(ACSUEAICharacter::getEnemyTeam,return TEXT("x"););
 
 
 protected:
@@ -37,8 +40,7 @@ protected:
     
     AWeapon *myWeapon;
     
-    UPROPERTY(EditAnywhere, Category="Mesh")
-    class USkeletalMeshComponent* Mesh3P;
+   
 
 	
 	

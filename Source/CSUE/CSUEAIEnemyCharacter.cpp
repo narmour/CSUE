@@ -6,3 +6,6 @@
 
 
 
+FString ACSUEAIEnemyCharacter::getEnemyTeam(){
+    return enemyTeam;
+}

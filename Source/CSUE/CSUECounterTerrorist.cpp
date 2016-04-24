@@ -6,3 +6,8 @@
 
 
 
+
+
+FString ACSUECounterTerrorist::getEnemyTeam(){
+    return enemyTeam;
+}
