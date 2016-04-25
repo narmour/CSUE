@@ -111,14 +111,20 @@ void AWeapon::OnStopFire()
 
 
 void AWeapon::WeaponTrace(){
-	//cast pawn to char
+	//cast pawn to player char and AI char
 	auto myFPChar = Cast<ACSUECharacter>(myPawn);
+	auto myAIChar = Cast<ACSUEAICharacter>(myPawn);
     static FName MuzzleSocket = FName(TEXT("MuzzleFlashSocket"));
     
     FVector startPos = WeaponMesh->GetSocketLocation(MuzzleSocket);
 	FVector forward;
+	//if its the player char, use camera forward, if its an AI, use actor forward
 	if (myFPChar) {
 		forward = myFPChar->GetFirstPersonCameraComponent()->GetForwardVector();
+	}
+	else if (myAIChar)
+	{
+		forward = myAIChar->GetActorForwardVector();
 	}
 	//spray patterns?
     FVector endPos = forward.GetSafeNormal() * weaponRange;
