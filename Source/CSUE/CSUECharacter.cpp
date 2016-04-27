@@ -53,6 +53,7 @@ ACSUECharacter::ACSUECharacter()
     
     
     bShooting = false;
+    charHealth = 100;
 }
 
 void ACSUECharacter::BeginPlay(){

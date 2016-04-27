@@ -67,9 +67,9 @@ public:
     FString getEnemyTeam();
     
     UPROPERTY(EditAnywhere)
-    int32 charHealth = 100;
+    int32 charHealth;
     
-    UFUNCTION(BlueprintCallable,Category = "player")
+    UFUNCTION(BlueprintPure,Category = "player")
     int32 getHealth() const;
     
 
