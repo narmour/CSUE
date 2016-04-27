@@ -65,6 +65,13 @@ public:
     
     //function to return enemy type so weapon knows who the bad guys are
     FString getEnemyTeam();
+    
+    UPROPERTY(EditAnywhere)
+    int32 charHealth = 100;
+    
+    UFUNCTION(BlueprintCallable,Category = "player")
+    int32 getHealth() const;
+    
 
     
 

@@ -274,3 +274,7 @@ FString ACSUECharacter::getEnemyTeam(){
 
     
 }
+
+int32 ACSUECharacter::getHealth() const{
+    return charHealth;
+}

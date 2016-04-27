@@ -21,11 +21,21 @@ public:
 
 	//HUD    will eventually get to this
     
-private:
+protected:
     UPROPERTY(EditAnywhere)
     ACSUEGameManager *myManager;
     
     int32 totalRoundsPlayed = 0;
+    
+    //widget class for hud
+    UPROPERTY(EditAnywhere,BlueprintReadWrite)
+    TSubclassOf<UUserWidget> HUDWidgetClass;
+    
+    //instance of hud
+    UPROPERTY()
+    UUserWidget *CurrentWidget;
+    
+    
 };
 
 

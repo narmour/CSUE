@@ -3,6 +3,7 @@
 #include "CSUE.h"
 #include "CSUEGameMode.h"
 #include "CSUEHUD.h"
+#include "Runtime/UMG/Public/Blueprint/UserWidget.h"
 #include "CSUECharacter.h"
 
 ACSUEGameMode::ACSUEGameMode()
@@ -20,6 +21,13 @@ ACSUEGameMode::ACSUEGameMode()
 void ACSUEGameMode::BeginPlay(){
     UE_LOG(LogTemp, Warning, TEXT("HI FROM GAMEMODE BEGINPLAY"));
     startRound();
+    
+    if(HUDWidgetClass){
+        CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), HUDWidgetClass);
+        if(CurrentWidget){
+            CurrentWidget->AddToViewport();
+        }
+    }
 
 }
 
