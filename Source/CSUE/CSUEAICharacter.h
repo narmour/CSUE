@@ -29,7 +29,11 @@ public:
     //virtual to get enemyType for Weapon class
     virtual FString getEnemyTeam() PURE_VIRTUAL(ACSUEAICharacter::getEnemyTeam,return TEXT("x"););
 
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void OnStartFire();
 
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	void OnStopFire();
 protected:
 	//character health
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
@@ -38,6 +42,7 @@ protected:
     UPROPERTY(EditAnywhere,Category = "Weapon")
     TSubclassOf<AWeapon>weaponType;
     
+	UPROPERTY(BlueprintReadOnly,VisibleAnywhere, Category = "Weapon")
     AWeapon *myWeapon;
     
    

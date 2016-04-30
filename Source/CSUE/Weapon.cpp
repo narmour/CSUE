@@ -75,7 +75,7 @@ UAudioComponent* AWeapon::PlayWeaponSound(USoundCue *Sound){
     UAudioComponent *AC = NULL;
     
     if (Sound) {
-        AC = UGameplayStatics::PlaySoundAttached(Sound, RootComponent);
+        AC = UGameplayStatics::SpawnSoundAttached(Sound, RootComponent);
     }
     return AC;
 }

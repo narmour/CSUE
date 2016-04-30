@@ -63,3 +63,12 @@ void ACSUEAICharacter::takeDamage(float damage) {
 		myHealth = 0;
 }
 
+void ACSUEAICharacter::OnStartFire()
+{
+	myWeapon->OnStartFire();
+}
+
+void ACSUEAICharacter::OnStopFire()
+{
+	myWeapon->OnStopFire();
+}
