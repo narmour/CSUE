@@ -14,18 +14,35 @@ public:
 
 	//GameManager will call these functions
 	void startRound();
-	void endRound();
+	void endRound(FString winningTeam);
     
     virtual void BeginPlay() override;
 
 
 	//HUD    will eventually get to this
     
-private:
+    ACSUEGameManager *getManager(){return myManager;};
+    
+protected:
     UPROPERTY(EditAnywhere)
+    
+    TSubclassOf<ACSUEGameManager> managerClass;
+    
     ACSUEGameManager *myManager;
     
     int32 totalRoundsPlayed = 0;
+    int32 tWins = 0;
+    int32 ctWins =0;
+    
+    //widget class for hud
+    UPROPERTY(EditAnywhere,BlueprintReadWrite)
+    TSubclassOf<UUserWidget> HUDWidgetClass;
+    
+    //instance of hud
+    UPROPERTY()
+    UUserWidget *CurrentWidget;
+    
+    
 };
 
 

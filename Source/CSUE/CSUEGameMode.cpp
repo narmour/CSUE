@@ -3,6 +3,7 @@
 #include "CSUE.h"
 #include "CSUEGameMode.h"
 #include "CSUEHUD.h"
+#include "Runtime/UMG/Public/Blueprint/UserWidget.h"
 #include "CSUECharacter.h"
 
 ACSUEGameMode::ACSUEGameMode()
@@ -14,18 +15,59 @@ ACSUEGameMode::ACSUEGameMode()
 
 	// use our custom HUD class
 	HUDClass = ACSUEHUD::StaticClass();
+    
+    static ConstructorHelpers::FObjectFinder<UBlueprint> managerBlueprint(TEXT("/Game/FirstPersonCPP/Blueprints/CSUEGameManager_BP"));
+    if(managerBlueprint.Object){
+        managerClass = (UClass*)managerBlueprint.Object->GeneratedClass;
+    }
+    
+    
 
 }
 
 void ACSUEGameMode::BeginPlay(){
     UE_LOG(LogTemp, Warning, TEXT("HI FROM GAMEMODE BEGINPLAY"));
-    startRound();
+    
+    if(HUDWidgetClass){
+        CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), HUDWidgetClass);
+        if(CurrentWidget){
+            CurrentWidget->AddToViewport();
+        }
+    }
+    
+    if(managerClass){
+        auto myWorld = GetWorld();
+        if(myWorld)
+        {
+            FActorSpawnParameters SpawnParams;
+            SpawnParams.Owner = this;
+            SpawnParams.Instigator = Instigator;
+            myManager = myWorld->SpawnActor<ACSUEGameManager>(managerClass,FVector::ZeroVector,FRotator::ZeroRotator,SpawnParams);
+        
+        }
+
+    }
+    
+    //startRound();
+    
 
 }
 
 void ACSUEGameMode::startRound(){
     totalRoundsPlayed +=1;
+    myManager->initTeams();
     
    // myManager->
     
+}
+
+void ACSUEGameMode::endRound(FString winningTeam){
+    if(winningTeam == FString(TEXT("t")))
+        tWins+=1;
+    else
+        ctWins+=1;
+    
+    UE_LOG(LogTemp,Warning,TEXT("ROUND OVER"));
+    
+    //startRound();
 }

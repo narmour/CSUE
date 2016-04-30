@@ -17,6 +17,8 @@ class CSUE_API ACSUETerrorist : public ACSUEAICharacter
 public:
     
     virtual FString getEnemyTeam() override;
+    virtual void Tick( float DeltaSeconds ) override;
+
     
 private:
     FString enemyTeam = FString(TEXT("CT"));

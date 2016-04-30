@@ -30,7 +30,7 @@ class ACSUECharacter : public ACharacter
     TSubclassOf<AWeapon> WeaponClass;
 
 	//Team character is on, hardcoded for CT, want to set with HUD?
-    FString myTeam = FString(TEXT("CT"));
+    FString myTeam = FString(TEXT("T"));
     //instance of the weapon
     AWeapon *myWeapon;
     
@@ -65,6 +65,13 @@ public:
     
     //function to return enemy type so weapon knows who the bad guys are
     FString getEnemyTeam();
+    
+    UPROPERTY(EditAnywhere)
+    int32 charHealth;
+    
+    UFUNCTION(BlueprintPure,Category = "player")
+    int32 getHealth() const;
+    
 
     
 

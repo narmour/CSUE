@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "CSUETerrorist.h"
 #include "CSUECounterTerrorist.h"
+//#include "CSUEGameMode.h"
 #include "CSUEGameManager.generated.h"
 
 UCLASS()
@@ -33,13 +34,27 @@ public:
 private:
 	//T AND CT TEAMS
     UPROPERTY(EditAnywhere,Category ="Teams")
-    TArray<ACSUETerrorist*> tTeam;
+    TArray<ACharacter*> tTeam;
     UPROPERTY(EditAnywhere,Category ="Teams")
-    TArray<ACSUECounterTerrorist*> ctTeam;
+    TArray<ACharacter*> ctTeam;
+    
+    UPROPERTY(EditAnywhere,Category ="Teams")
+    TSubclassOf<ACSUETerrorist> tClass;
+    UPROPERTY(EditAnywhere,Category ="Teams")
+    TSubclassOf<ACSUECounterTerrorist> ctClass;
+    
+    //T AND CT SPAWNPOINTS
+    UPROPERTY(EditAnywhere,Category = "Teams")
+    TArray<ATargetPoint*> tSpawns;
+    UPROPERTY(EditAnywhere,Category = "Teams")
+    TArray<ATargetPoint*> ctSpawns;
     
     //Keeps track of num alive for each team.
     int32 tAlive;
     int32 ctAlive;
+    
+    
+   // ACSUEGameMode *myGM;
 
 	
 	

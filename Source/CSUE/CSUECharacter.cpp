@@ -53,6 +53,7 @@ ACSUECharacter::ACSUECharacter()
     
     
     bShooting = false;
+    charHealth = 100;
 }
 
 void ACSUECharacter::BeginPlay(){
@@ -273,4 +274,8 @@ FString ACSUECharacter::getEnemyTeam(){
         return FString(TEXT("CT"));
 
     
+}
+
+int32 ACSUECharacter::getHealth() const{
+    return charHealth;
 }
