@@ -20,7 +20,7 @@ AWeapon::AWeapon(){
     ShootAC = nullptr;
 
     weaponRange = 9999.f;
-    weaponDamage = 1.f;
+    weaponDamage = 20.f;
     weaponFireRate = .05f;
 }
 

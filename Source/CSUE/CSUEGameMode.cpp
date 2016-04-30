@@ -27,7 +27,6 @@ ACSUEGameMode::ACSUEGameMode()
 
 void ACSUEGameMode::BeginPlay(){
     UE_LOG(LogTemp, Warning, TEXT("HI FROM GAMEMODE BEGINPLAY"));
-    //startRound();
     
     if(HUDWidgetClass){
         CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), HUDWidgetClass);
@@ -48,12 +47,27 @@ void ACSUEGameMode::BeginPlay(){
         }
 
     }
+    
+    //startRound();
+    
+
 }
 
 void ACSUEGameMode::startRound(){
     totalRoundsPlayed +=1;
-    //myManager->initTeams();
+    myManager->initTeams();
     
    // myManager->
     
+}
+
+void ACSUEGameMode::endRound(FString winningTeam){
+    if(winningTeam == FString(TEXT("t")))
+        tWins+=1;
+    else
+        ctWins+=1;
+    
+    UE_LOG(LogTemp,Warning,TEXT("ROUND OVER"));
+    
+    //startRound();
 }

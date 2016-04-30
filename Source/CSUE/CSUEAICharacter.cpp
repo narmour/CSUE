@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CSUE.h"
+#include "CSUEGameMode.h"
 #include "CSUEAICharacter.h"
 
 
@@ -45,6 +46,8 @@ void ACSUEAICharacter::BeginPlay()
 void ACSUEAICharacter::Tick( float DeltaTime )
 {
 	Super::Tick( DeltaTime );
+    
+    
 
 }
 

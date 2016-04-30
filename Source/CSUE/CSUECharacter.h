@@ -30,7 +30,7 @@ class ACSUECharacter : public ACharacter
     TSubclassOf<AWeapon> WeaponClass;
 
 	//Team character is on, hardcoded for CT, want to set with HUD?
-    FString myTeam = FString(TEXT("CT"));
+    FString myTeam = FString(TEXT("T"));
     //instance of the weapon
     AWeapon *myWeapon;
     

@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "CSUETerrorist.h"
 #include "CSUECounterTerrorist.h"
+//#include "CSUEGameMode.h"
 #include "CSUEGameManager.generated.h"
 
 UCLASS()
@@ -51,6 +52,9 @@ private:
     //Keeps track of num alive for each team.
     int32 tAlive;
     int32 ctAlive;
+    
+    
+   // ACSUEGameMode *myGM;
 
 	
 	
