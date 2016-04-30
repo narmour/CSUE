@@ -15,12 +15,19 @@ ACSUEGameMode::ACSUEGameMode()
 
 	// use our custom HUD class
 	HUDClass = ACSUEHUD::StaticClass();
+    
+    static ConstructorHelpers::FObjectFinder<UBlueprint> managerBlueprint(TEXT("/Game/FirstPersonCPP/Blueprints/CSUEGameManager_BP"));
+    if(managerBlueprint.Object){
+        managerClass = (UClass*)managerBlueprint.Object->GeneratedClass;
+    }
+    
+    
 
 }
 
 void ACSUEGameMode::BeginPlay(){
     UE_LOG(LogTemp, Warning, TEXT("HI FROM GAMEMODE BEGINPLAY"));
-    startRound();
+    //startRound();
     
     if(HUDWidgetClass){
         CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), HUDWidgetClass);
@@ -28,11 +35,24 @@ void ACSUEGameMode::BeginPlay(){
             CurrentWidget->AddToViewport();
         }
     }
+    
+    if(managerClass){
+        auto myWorld = GetWorld();
+        if(myWorld)
+        {
+            FActorSpawnParameters SpawnParams;
+            SpawnParams.Owner = this;
+            SpawnParams.Instigator = Instigator;
+            myManager = myWorld->SpawnActor<ACSUEGameManager>(managerClass,FVector::ZeroVector,FRotator::ZeroRotator,SpawnParams);
+        
+        }
 
+    }
 }
 
 void ACSUEGameMode::startRound(){
     totalRoundsPlayed +=1;
+    //myManager->initTeams();
     
    // myManager->
     

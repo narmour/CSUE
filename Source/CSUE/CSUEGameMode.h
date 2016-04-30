@@ -23,6 +23,9 @@ public:
     
 protected:
     UPROPERTY(EditAnywhere)
+    
+    TSubclassOf<ACSUEGameManager> managerClass;
+    
     ACSUEGameManager *myManager;
     
     int32 totalRoundsPlayed = 0;
