@@ -26,11 +26,11 @@ void ACSUEGameManager::BeginPlay()
         auto tPoint = *targetItr;
         
         //if its a ct spawn point, put in ct array, else put in t array
-        if(tPoint->GetName().Contains(FString(TEXT("ct")))){
+        if(tPoint->GetName().Contains(FString(TEXT("Counter")))){
             ctSpawns.Add(tPoint);
             
         }
-        else{
+        else if (tPoint->GetName().Contains(FString(TEXT("Terrorist"))) ){
             tSpawns.Add(tPoint);
         }
     }
@@ -69,15 +69,16 @@ void ACSUEGameManager::initTeams(){
         for(int i =0;i<tSpawns.Num();i++){
             FVector spawnLoc = tSpawns[i]->GetActorLocation();
             //spawn terrorist team
-            auto terrorist = World->SpawnActor<ACSUETerrorist>(tClass,spawnLoc,Rotation,SpawnParams);
+            auto terrorist = World->SpawnActor<ACSUETerrorist>(tClass,spawnLoc,FRotator::ZeroRotator,SpawnParams);
+			//Spawn controller
+			terrorist->SpawnDefaultController();
             tTeam.Add(terrorist);
-            //attach ai controller here??
-            
+       
             spawnLoc = ctSpawns[i]->GetActorLocation();
             //spawn ct team
             auto counterTerrorist = World->SpawnActor<ACSUECounterTerrorist>(ctClass,spawnLoc,FRotator::ZeroRotator,SpawnParams);
+			counterTerrorist->SpawnDefaultController();
             ctTeam.Add(counterTerrorist);
-            
             
         }
         
