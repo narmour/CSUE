@@ -15,6 +15,8 @@ public:
 	//GameManager will call these functions
 	void startRound();
 	void endRound(FString winningTeam);
+
+	void endGame(FString winningTeam);
     
     virtual void BeginPlay() override;
     

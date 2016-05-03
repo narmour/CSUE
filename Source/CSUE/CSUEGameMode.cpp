@@ -54,7 +54,14 @@ void ACSUEGameMode::BeginPlay(){
 }
 
 
+void ACSUEGameMode::endGame(FString winningTeam) {
+	UE_LOG(LogTemp, Warning, TEXT("GAME OVER"));
+	//reset rounds
+	tWins = 0;
+	ctWins = 0;
 
+	//do more post-game stuff here
+}
 void ACSUEGameMode::startRound(){
     totalRoundsPlayed +=1;
     myManager->initTeams();
@@ -73,8 +80,11 @@ void ACSUEGameMode::endRound(FString winningTeam){
 	//reset round time
 	GetWorldTimerManager().ClearTimer(roundTimer);
 	time = 180;
-	//start new round
+	//start new round if game is not over
     UE_LOG(LogTemp,Warning,TEXT("ROUND OVER"));
-    startRound();
+	if (tWins == 5 || ctWins == 5)
+		endGame(winningTeam);
+	else
+		startRound();
 
 }
