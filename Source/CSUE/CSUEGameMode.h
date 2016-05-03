@@ -17,12 +17,24 @@ public:
 	void endRound(FString winningTeam);
     
     virtual void BeginPlay() override;
-
-
-	//HUD    will eventually get to this
     
     ACSUEGameManager *getManager(){return myManager;};
-    
+
+	//HUD bp functions
+	UFUNCTION(BlueprintCallable,Category = "HUD")
+	int32 getTWins() { return tWins; };
+
+	UFUNCTION(BlueprintCallable,Category = "HUD")
+
+	int32 getCTWins() { return ctWins; };
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+		FTimerHandle getTimer() { return roundTimer; };
+	UFUNCTION(BlueprintCallable,Category = "HUD")
+		int32 getTime() { return time; };
+
+
+
+	void decrementTimer() { time -= 1; };
 protected:
     UPROPERTY(EditAnywhere)
     
@@ -33,6 +45,8 @@ protected:
     int32 totalRoundsPlayed = 0;
     int32 tWins = 0;
     int32 ctWins =0;
+	int32 time = 180;
+	FTimerHandle roundTimer;
     
     //widget class for hud
     UPROPERTY(EditAnywhere,BlueprintReadWrite)

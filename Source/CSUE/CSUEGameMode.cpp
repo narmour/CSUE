@@ -53,9 +53,13 @@ void ACSUEGameMode::BeginPlay(){
 
 }
 
+
+
 void ACSUEGameMode::startRound(){
     totalRoundsPlayed +=1;
     myManager->initTeams();
+	//float time = 180.0f;
+	GetWorldTimerManager().SetTimer(roundTimer,this,&ACSUEGameMode::decrementTimer,1.f,true);
     
    // myManager->
     
@@ -66,8 +70,11 @@ void ACSUEGameMode::endRound(FString winningTeam){
         tWins+=1;
     else
         ctWins+=1;
-    
+	//reset round time
+	GetWorldTimerManager().ClearTimer(roundTimer);
+	time = 180;
+	//start new round
     UE_LOG(LogTemp,Warning,TEXT("ROUND OVER"));
-    //start new round?
     startRound();
+
 }
