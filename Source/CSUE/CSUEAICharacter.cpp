@@ -16,6 +16,12 @@ ACSUEAICharacter::ACSUEAICharacter()
 
 }
 
+void ACSUEAICharacter::destroySelf() {
+	myWeapon->OnStopFire();
+	myWeapon->Destroy();
+	Destroy();
+}
+
 
 
 // Called when the game starts or when spawned

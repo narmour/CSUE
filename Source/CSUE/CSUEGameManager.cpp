@@ -55,11 +55,36 @@ void ACSUEGameManager::Tick( float DeltaTime )
 }
 
 void ACSUEGameManager::initTeams(){
+
+	//clear arrays and delete all actors if any left
+	for (int i = 0; i < tTeam.Num(); i++) {
+		auto t = (ACSUETerrorist*)tTeam[i];
+		if (t) 
+			t->destroySelf();
+	}
+	for (int i = 0; i < ctTeam.Num(); i++) {
+		auto ct = (ACSUECounterTerrorist*)ctTeam[i];
+		if (ct)
+			ct->destroySelf();
+	}
+
+	tTeam.Empty();
+	ctTeam.Empty();
+
+
+
+
+
+
+
+
+	UE_LOG(LogTemp,Warning,TEXT(" T: %i    CT:%i "),tTeam.Num(),tTeam.Num());
+
+
     //if we set spawn points spawn 5 CT and 5 T
     UWorld* World = GetWorld();
     //UE_LOG(LogTemp,Warning,TEXT("TRIED TO SPAWN  T: %i    CT:%i "),tSpawns.Num(),ctSpawns.Num());
-    tTeam.Empty();
-    ctTeam.Empty();
+   
     if(tSpawns.Num() ==5 && ctSpawns.Num() == 5){
 
             FActorSpawnParameters SpawnParams;

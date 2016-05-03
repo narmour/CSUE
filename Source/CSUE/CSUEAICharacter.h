@@ -34,6 +34,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	void OnStopFire();
+
+	//called when health is 0
+	void destroySelf();
 protected:
 	//character health
 	UPROPERTY(EditAnywhere, Category = "Gameplay")

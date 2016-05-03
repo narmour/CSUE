@@ -12,8 +12,9 @@ void ACSUETerrorist::Tick(float DeltaTime){
         auto myGM = (ACSUEGameMode*)GetWorld()->GetAuthGameMode();
         if(myGM)
             myGM->getManager()->killT();
-        myWeapon->Destroy();
-        Destroy();
+        //myWeapon->Destroy();
+        //Destroy();
+		destroySelf();
     }
 
 }

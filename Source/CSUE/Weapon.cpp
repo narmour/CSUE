@@ -105,8 +105,10 @@ void AWeapon::OnStartFire()
 void AWeapon::OnStopFire()
 {
     GetWorldTimerManager().ClearTimer(shootingTimer);
-    ShootAC->Deactivate();
-    muzzlePSC->DeactivateSystem();
+	if(ShootAC)
+		ShootAC->Deactivate();
+	if(muzzlePSC)
+		muzzlePSC->DeactivateSystem();
 }
 
 
