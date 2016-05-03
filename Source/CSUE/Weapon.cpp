@@ -51,11 +51,12 @@ void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
     auto playerChar = Cast<ACSUECharacter>(myPawn);
+	auto aiChar = Cast<ACSUEAICharacter>(myPawn);
+
     //check if the weapon is equiped by player char, if not, get enemy type from AICHAR
     if(playerChar)
         enemyType =playerChar->getEnemyTeam();
-    else{
-        auto aiChar = Cast<ACSUEAICharacter>(myPawn);
+    else if (aiChar){
         enemyType = aiChar->getEnemyTeam();
         //pure virtual works, doope
         UE_LOG(LogTemp,Warning,TEXT("%s"),*enemyType);

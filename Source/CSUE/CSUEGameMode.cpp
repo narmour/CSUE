@@ -68,6 +68,6 @@ void ACSUEGameMode::endRound(FString winningTeam){
         ctWins+=1;
     
     UE_LOG(LogTemp,Warning,TEXT("ROUND OVER"));
-    
-    //startRound();
+    //start new round?
+    startRound();
 }

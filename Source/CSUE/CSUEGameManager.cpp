@@ -58,8 +58,8 @@ void ACSUEGameManager::initTeams(){
     //if we set spawn points spawn 5 CT and 5 T
     UWorld* World = GetWorld();
     //UE_LOG(LogTemp,Warning,TEXT("TRIED TO SPAWN  T: %i    CT:%i "),tSpawns.Num(),ctSpawns.Num());
-    //tTeam.Empty();
-    //ctTeam.Empty();
+    tTeam.Empty();
+    ctTeam.Empty();
     if(tSpawns.Num() ==5 && ctSpawns.Num() == 5){
 
             FActorSpawnParameters SpawnParams;
