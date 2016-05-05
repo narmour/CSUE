@@ -119,18 +119,20 @@ void AWeapon::WeaponTrace(){
 	auto myAIChar = Cast<ACSUEAICharacter>(myPawn);
     static FName MuzzleSocket = FName(TEXT("MuzzleFlashSocket"));
     
-    FVector startPos = WeaponMesh->GetSocketLocation(MuzzleSocket);
+    FVector startPos = myPawn->GetActorLocation();
 	FVector forward;
 	//if its the player char, use camera forward, if its an AI, use actor forward
 	if (myFPChar) {
 		forward = myFPChar->GetFirstPersonCameraComponent()->GetForwardVector();
+        //add camera height if its the player
+        startPos.Z +=64;
 	}
 	else if (myAIChar)
 	{
 		forward = myAIChar->GetActorForwardVector();
 	}
 	//spray patterns?
-    FVector endPos = forward.GetSafeNormal() * weaponRange;
+    FVector endPos = startPos + (forward.GetSafeNormal() * weaponRange);
     
     
     //check if we blasted an enemy wit our weapon
