@@ -39,7 +39,8 @@ void ACSUEAICharacter::BeginPlay()
             myWeapon = World->SpawnActor<AWeapon>(this->weaponType,FVector::ZeroVector,Rotation,SpawnParams);
             if(myWeapon){
                 UE_LOG(LogTemp,Warning,TEXT("ATTATCHED WEAPON"));
-                myWeapon->WeaponMesh->AttachTo(this->GetMesh(),TEXT("GUN"),EAttachLocation::SnapToTargetIncludingScale,true);
+                myWeapon->WeaponMesh->AttachTo(this->GetMesh(),TEXT("WeaponPoint"),EAttachLocation::SnapToTargetIncludingScale,true);
+                myWeapon->SetActorRelativeRotation(Rotation);
                 myWeapon->myPawn = this;
             }
         }
