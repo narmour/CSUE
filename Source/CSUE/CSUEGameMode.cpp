@@ -18,8 +18,17 @@ ACSUEGameMode::ACSUEGameMode()
     
     static ConstructorHelpers::FObjectFinder<UBlueprint> managerBlueprint(TEXT("/Game/FirstPersonCPP/Blueprints/CSUEGameManager_BP"));
     if(managerBlueprint.Object){
+		UE_LOG(LogTemp, Warning, TEXT("managerBLUEPRINT SET"));
+
         managerClass = (UClass*)managerBlueprint.Object->GeneratedClass;
     }
+
+	static ConstructorHelpers::FObjectFinder<UBlueprint> bombBlueprint(TEXT("/Game/FirstPersonCPP/Blueprints/CSUEBomb_BP"));
+	if (bombBlueprint.Object) {
+		UE_LOG(LogTemp, Warning, TEXT("bombBLUEPRINT SET"));
+
+		bombClass = (UClass*)bombBlueprint.Object->GeneratedClass;
+	}
     
     
 
@@ -43,9 +52,28 @@ void ACSUEGameMode::BeginPlay(){
             SpawnParams.Owner = this;
             SpawnParams.Instigator = Instigator;
             myManager = myWorld->SpawnActor<ACSUEGameManager>(managerClass,FVector::ZeroVector,FRotator::ZeroRotator,SpawnParams);
+			UE_LOG(LogTemp, Warning, TEXT("MANAGER SPAWNED SPAWNED"));
+
         
         }
 
+	}
+	if (bombClass) {
+		auto myWorld = GetWorld();
+		UE_LOG(LogTemp, Warning, TEXT("BOMBS SPAWNED"));
+
+		if (myWorld) {
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = Instigator;
+			//hardcoded spawnpoints
+			FVector aSpawn(-869.f, 245.f, 156.f);
+			FVector bSpawn(-9400.0f, 245.f, 79.f);
+			//spawn both bombs
+			myABomb = myWorld->SpawnActor<ACSUEBomb>(bombClass, aSpawn, FRotator::ZeroRotator, SpawnParams);
+			myBBomb = myWorld->SpawnActor<ACSUEBomb>(bombClass, bSpawn, FRotator::ZeroRotator, SpawnParams);
+			UE_LOG(LogTemp, Warning, TEXT("BOMBS SPAWNED"));
+		}
     }
     
     //startRound();

@@ -69,7 +69,7 @@ void ACSUECharacter::BeginPlay(){
             //myWeapon = new AWeapon(1.f,99999.f);
             myWeapon = World->SpawnActor<AWeapon>(this->WeaponClass,FVector::ZeroVector,Rotation,SpawnParams);
             if(myWeapon){
-                UE_LOG(LogTemp,Warning,TEXT("ATTATCHED WEAPON"));
+                //UE_LOG(LogTemp,Warning,TEXT("ATTATCHED WEAPON"));
                 myWeapon->WeaponMesh->AttachTo(Mesh1P,TEXT("GripPoint"),EAttachLocation::SnapToTargetIncludingScale,true);
                 myWeapon->myPawn = this;
             }

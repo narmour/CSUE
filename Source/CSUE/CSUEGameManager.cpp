@@ -34,7 +34,7 @@ void ACSUEGameManager::BeginPlay()
             tSpawns.Add(tPoint);
         }
     }
-    UE_LOG(LogTemp,Warning,TEXT("BEGINPLAY  T: %i    CT:%i "),tSpawns.Num(),ctSpawns.Num());
+   // UE_LOG(LogTemp,Warning,TEXT("BEGINPLAY  T: %i    CT:%i "),tSpawns.Num(),ctSpawns.Num());
     
 
     auto myGM = (ACSUEGameMode*)GetWorld()->GetAuthGameMode();
@@ -78,7 +78,7 @@ void ACSUEGameManager::initTeams(){
 
 
 
-	UE_LOG(LogTemp,Warning,TEXT(" T: %i    CT:%i "),tTeam.Num(),tTeam.Num());
+	//UE_LOG(LogTemp,Warning,TEXT(" T: %i    CT:%i "),tTeam.Num(),tTeam.Num());
 
 
     //if we set spawn points spawn 5 CT and 5 T

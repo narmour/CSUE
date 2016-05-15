@@ -2,6 +2,7 @@
 #pragma once
 #include "GameFramework/GameMode.h"
 #include "CSUEGameManager.h"
+#include "CSUEBomb.h"
 #include "CSUEGameMode.generated.h"
 
 UCLASS(minimalapi)
@@ -37,12 +38,19 @@ public:
 
 
 	void decrementTimer() { time -= 1; };
+	UFUNCTION(BlueprintCallable, Category = "bomb")
+	ACSUEBomb *getABomb() { return myABomb; };
+	UFUNCTION(BlueprintCallable, Category = "bomb")
+	ACSUEBomb *getBBomb() { return myBBomb; };
 protected:
     UPROPERTY(EditAnywhere)
     
     TSubclassOf<ACSUEGameManager> managerClass;
+	TSubclassOf<ACSUEBomb> bombClass;
     
     ACSUEGameManager *myManager;
+	ACSUEBomb *myABomb;
+	ACSUEBomb *myBBomb;
     
     int32 totalRoundsPlayed = 0;
     int32 tWins = 0;
@@ -57,6 +65,8 @@ protected:
     //instance of hud
     UPROPERTY()
     UUserWidget *CurrentWidget;
+
+
     
     
 };
