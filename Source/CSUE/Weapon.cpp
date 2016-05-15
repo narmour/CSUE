@@ -94,16 +94,21 @@ UParticleSystemComponent * AWeapon::muzzleFlash(UParticleSystem * particle)
 
 void AWeapon::OnStartFire()
 {
-    ShootAC = PlayWeaponSound(FireLoopSound);
-    muzzlePSC = muzzleFlash(MuzzleFX);
-    GetWorldTimerManager().SetTimer(shootingTimer,this,&AWeapon::WeaponTrace,weaponFireRate,true);
+	if (!bShooting) {
+		UE_LOG(LogTemp, Warning, TEXT("ON START"));
 
-    WeaponTrace();
-    
+		bShooting = true;
+		ShootAC = PlayWeaponSound(FireLoopSound);
+		muzzlePSC = muzzleFlash(MuzzleFX);
+		WeaponTrace();
+		GetWorldTimerManager().SetTimer(shootingTimer, this, &AWeapon::shooting, weaponFireRate, false);
+		
+	}
 }
 
 void AWeapon::OnStopFire()
 {
+	bShooting = false;
     GetWorldTimerManager().ClearTimer(shootingTimer);
 	if(ShootAC)
 		ShootAC->Deactivate();
@@ -118,6 +123,10 @@ void AWeapon::WeaponTrace(){
 	auto myFPChar = Cast<ACSUECharacter>(myPawn);
 	auto myAIChar = Cast<ACSUEAICharacter>(myPawn);
     static FName MuzzleSocket = FName(TEXT("MuzzleFlashSocket"));
+	//bShooting = false;
+	UE_LOG(LogTemp, Warning, TEXT("WEAPONTRACE"));
+
+
     
     FVector startPos = myPawn->GetActorLocation();
 	FVector forward;
@@ -156,6 +165,7 @@ void AWeapon::WeaponTrace(){
         }
         
     }
+	
     
 }
 

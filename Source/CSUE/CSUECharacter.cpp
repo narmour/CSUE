@@ -59,7 +59,8 @@ ACSUECharacter::ACSUECharacter()
 void ACSUECharacter::BeginPlay(){
     Super::BeginPlay();
     
-    if(this->WeaponClass){
+	
+    if(this->RifleClass){
         UWorld *World = GetWorld();
         if(World){
             FActorSpawnParameters SpawnParams;
@@ -67,14 +68,31 @@ void ACSUECharacter::BeginPlay(){
             SpawnParams.Instigator = Instigator;
             FRotator Rotation(0.f,0.f,-90.f);
             //myWeapon = new AWeapon(1.f,99999.f);
-            myWeapon = World->SpawnActor<AWeapon>(this->WeaponClass,FVector::ZeroVector,Rotation,SpawnParams);
-            if(myWeapon){
+            myRifle = World->SpawnActor<ACSUERifle>(this->RifleClass,FVector::ZeroVector,Rotation,SpawnParams);
+            if(myRifle){
                 //UE_LOG(LogTemp,Warning,TEXT("ATTATCHED WEAPON"));
-                myWeapon->WeaponMesh->AttachTo(Mesh1P,TEXT("GripPoint"),EAttachLocation::SnapToTargetIncludingScale,true);
-                myWeapon->myPawn = this;
+                myRifle->WeaponMesh->AttachTo(Mesh1P,TEXT("GripPoint"),EAttachLocation::SnapToTargetIncludingScale,true);
+                myRifle->myPawn = this;
             }
         }
     }
+	
+	if (this->ShotgunClass) {
+		UWorld *World = GetWorld();
+		if (World) {
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = Instigator;
+			FRotator Rotation(0.f, 0.f, -90.f);
+			//myWeapon = new AWeapon(1.f,99999.f);
+			myShotgun = World->SpawnActor<ACSUEShotgun>(this->ShotgunClass, FVector::ZeroVector, Rotation, SpawnParams);
+			if (myShotgun) {
+				//UE_LOG(LogTemp,Warning,TEXT("ATTATCHED WEAPON"));
+				myShotgun->WeaponMesh->AttachTo(Mesh1P, TEXT("weaponStash"), EAttachLocation::SnapToTargetIncludingScale, true);
+				myShotgun->myPawn = this;
+			}
+		}
+	}
 
     
     
@@ -110,14 +128,37 @@ void ACSUECharacter::SetupPlayerInputComponent(class UInputComponent* InputCompo
 	InputComponent->BindAxis("TurnRate", this, &ACSUECharacter::TurnAtRate);
 	InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	InputComponent->BindAxis("LookUpRate", this, &ACSUECharacter::LookUpAtRate);
+
+	//switch weapons
+	InputComponent->BindAction("switch", IE_Pressed, this, &ACSUECharacter::switchWeapon);
 }
 
+void ACSUECharacter::switchWeapon() {
+	if (currentWeapon == FString(TEXT("rifle"))) {
+		myShotgun->WeaponMesh->AttachTo(Mesh1P, TEXT("GripPoint"), EAttachLocation::SnapToTargetIncludingScale, true);
+		myRifle->WeaponMesh->AttachTo(Mesh1P, TEXT("weaponStash"), EAttachLocation::SnapToTargetIncludingScale, true);
+		currentWeapon = FString(TEXT("shotgun"));
+	}
+	else {
+		myShotgun->WeaponMesh->AttachTo(Mesh1P, TEXT("weaponStash"), EAttachLocation::SnapToTargetIncludingScale, true);
+		myRifle->WeaponMesh->AttachTo(Mesh1P, TEXT("GripPoint"), EAttachLocation::SnapToTargetIncludingScale, true);
+		currentWeapon = FString(TEXT("rifle"));
+
+
+	}
+
+
+}
 void ACSUECharacter::OnFire()
 {
     bShooting = true;
-    if(myWeapon &&bShooting){
-        myWeapon->OnStartFire();
+    if(myShotgun &&bShooting && currentWeapon == FString(TEXT("shotgun"))) {
+        myShotgun->OnStartFire();
+		//myShotgun->WeaponTrace();
     }
+	else if (myRifle &&bShooting) {
+		myRifle->OnStartFire();
+	}
     /*
 	// try and fire a projectile
 	if (ProjectileClass != NULL)
@@ -156,9 +197,13 @@ void ACSUECharacter::OnFire()
 
 void ACSUECharacter::OnStopFire(){
     bShooting = false;
-    if(myWeapon && !bShooting){
-        myWeapon->OnStopFire();
-    }
+	if (myShotgun &&!bShooting && currentWeapon == FString(TEXT("shotgun"))) {
+		myShotgun->OnStopFire();
+		//myShotgun->WeaponTrace();
+	}
+	else if (myRifle) {
+		myRifle->OnStopFire();
+	}
 }
 
 void ACSUECharacter::BeginTouch(const ETouchIndex::Type FingerIndex, const FVector Location)

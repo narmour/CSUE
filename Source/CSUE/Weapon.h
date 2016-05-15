@@ -51,7 +51,8 @@ public:
     FTimerHandle shootingTimer;
     //subclass to only apply damage to enemy type of myPawn
     FString enemyType;
-    
+	void shooting() { bShooting = false; OnStopFire(); };
+	bool bShooting = false;
     APawn *myPawn;
 	
 protected:

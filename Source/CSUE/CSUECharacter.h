@@ -2,6 +2,8 @@
 #pragma once
 #include "GameFramework/Character.h"
 #include "Weapon.h"
+#include "CSUERifle.h"
+#include "CSUEShotgun.h"
 #include "CSUECharacter.generated.h"
 
 class UInputComponent;
@@ -27,12 +29,18 @@ class ACSUECharacter : public ACharacter
     
     //give char our weapon class
     UPROPERTY(EditAnywhere,Category = "Weapon")
-    TSubclassOf<AWeapon> WeaponClass;
+    TSubclassOf<AWeapon> RifleClass;
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	TSubclassOf<AWeapon> ShotgunClass;
 
 	//Team character is on, hardcoded for CT, want to set with HUD?
     FString myTeam = FString(TEXT("T"));
     //instance of the weapon
-    AWeapon *myWeapon;
+	ACSUERifle *myRifle;
+	ACSUEShotgun *myShotgun;
+	//rifle is default starting weapon
+	FString currentWeapon = FString(TEXT("rifle"));
+	void switchWeapon();
     
     virtual void BeginPlay() override;
     
