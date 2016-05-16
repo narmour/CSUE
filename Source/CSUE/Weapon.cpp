@@ -22,11 +22,13 @@ AWeapon::AWeapon(){
     weaponRange = 9999.f;
     weaponDamage = 20.f;
     weaponFireRate = .05f;
+	maxAmmo = 30.f;
+	currentAmmo = 30.f;
 }
 
 
 // Sets values for child classes
-AWeapon::AWeapon(float wR,float wD,float wFR)
+AWeapon::AWeapon(float wR,float wD,float wFR,float wMA)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -41,6 +43,8 @@ AWeapon::AWeapon(float wR,float wD,float wFR)
     weaponRange = wR;
     weaponDamage = wD;
     weaponFireRate = wFR;
+	maxAmmo = wMA;
+	currentAmmo = wMA;
     
     
 }
@@ -94,16 +98,25 @@ UParticleSystemComponent * AWeapon::muzzleFlash(UParticleSystem * particle)
 
 void AWeapon::OnStartFire()
 {
-    ShootAC = PlayWeaponSound(FireLoopSound);
-    muzzlePSC = muzzleFlash(MuzzleFX);
-    GetWorldTimerManager().SetTimer(shootingTimer,this,&AWeapon::WeaponTrace,weaponFireRate,true);
+	if (!bShooting && currentAmmo >0) {
+		UE_LOG(LogTemp, Warning, TEXT("ON START"));
 
-    WeaponTrace();
-    
+		bShooting = true;
+		ShootAC = PlayWeaponSound(FireLoopSound);
+		muzzlePSC = muzzleFlash(MuzzleFX);
+		WeaponTrace();
+		GetWorldTimerManager().SetTimer(shootingTimer, this, &AWeapon::shooting, weaponFireRate, false);
+		
+	}
+	//if you outta bullets and havent started to reload yet
+	else if (!(currentAmmo > 0) && !(GetWorldTimerManager().IsTimerActive(reloadTimer))) {
+		GetWorldTimerManager().SetTimer(reloadTimer, this, &AWeapon::reload, 3.f, false);
+	}
 }
 
 void AWeapon::OnStopFire()
 {
+	bShooting = false;
     GetWorldTimerManager().ClearTimer(shootingTimer);
 	if(ShootAC)
 		ShootAC->Deactivate();
@@ -114,48 +127,63 @@ void AWeapon::OnStopFire()
 
 
 void AWeapon::WeaponTrace(){
-	//cast pawn to player char and AI char
-	auto myFPChar = Cast<ACSUECharacter>(myPawn);
-	auto myAIChar = Cast<ACSUEAICharacter>(myPawn);
-    static FName MuzzleSocket = FName(TEXT("MuzzleFlashSocket"));
-    
-    FVector startPos = myPawn->GetActorLocation();
-	FVector forward;
-	//if its the player char, use camera forward, if its an AI, use actor forward
-	if (myFPChar) {
-		forward = myFPChar->GetFirstPersonCameraComponent()->GetForwardVector();
-        //add camera height if its the player
-        startPos.Z +=64;
+	//use a bullet
+	currentAmmo -= 1;
+	
+	//if you outta bullets and havent started to reload yet
+	if (currentAmmo <1) {
+		GetWorldTimerManager().SetTimer(reloadTimer, this, &AWeapon::reload, 3.f, false);
+		OnStopFire();
 	}
-	else if (myAIChar)
-	{
-		forward = myAIChar->GetActorForwardVector();
+	else {
+		//cast pawn to player char and AI char
+		auto myFPChar = Cast<ACSUECharacter>(myPawn);
+		auto myAIChar = Cast<ACSUEAICharacter>(myPawn);
+		static FName MuzzleSocket = FName(TEXT("MuzzleFlashSocket"));
+		//bShooting = false;
+		UE_LOG(LogTemp, Warning, TEXT("WEAPONTRACE"));
+
+
+
+		FVector startPos = myPawn->GetActorLocation();
+		FVector forward;
+		//if its the player char, use camera forward, if its an AI, use actor forward
+		if (myFPChar) {
+			forward = myFPChar->GetFirstPersonCameraComponent()->GetForwardVector();
+			//add camera height if its the player
+			startPos.Z += 64;
+		}
+		else if (myAIChar)
+		{
+			forward = myAIChar->GetActorForwardVector();
+		}
+		//spray patterns?
+		FVector endPos = startPos + (forward.GetSafeNormal() * weaponRange);
+
+
+		//check if we blasted an enemy wit our weapon
+		FCollisionQueryParams traceParams(FName(TEXT("WeaponTrace")), true, Instigator);
+		traceParams.bTraceAsyncScene = true;
+		traceParams.bReturnPhysicalMaterial = true;
+
+		//check our fire ray against all objects with collision
+		FHitResult Hit(ForceInit);
+		GetWorld()->LineTraceSingleByObjectType(Hit, startPos, endPos, FCollisionObjectQueryParams::AllObjects, traceParams);
+		if (Hit.bBlockingHit) {
+			//spawn hit effect particle
+			if (Hit.GetActor()) {
+				UGameplayStatics::SpawnEmitterAtLocation(Hit.GetActor(), HitFX, Hit.ImpactPoint);
+				//if we hit an enemy, deal damage
+				auto hitEnemy = Cast<ACSUEAICharacter>(Hit.GetActor());
+				if (hitEnemy && enemyType != hitEnemy->getEnemyTeam()) {
+					hitEnemy->takeDamage(weaponDamage);
+				}
+
+			}
+
+		}
 	}
-	//spray patterns?
-    FVector endPos = startPos + (forward.GetSafeNormal() * weaponRange);
-    
-    
-    //check if we blasted an enemy wit our weapon
-    FCollisionQueryParams traceParams(FName(TEXT("WeaponTrace")), true,Instigator);
-    traceParams.bTraceAsyncScene = true;
-    traceParams.bReturnPhysicalMaterial = true;
-    
-    //check our fire ray against all objects with collision
-    FHitResult Hit(ForceInit);
-    GetWorld()->LineTraceSingleByObjectType(Hit, startPos, endPos, FCollisionObjectQueryParams::AllObjects, traceParams);
-    if(Hit.bBlockingHit){
-        //spawn hit effect particle
-		if (Hit.GetActor()) {
-			UGameplayStatics::SpawnEmitterAtLocation(Hit.GetActor(), HitFX, Hit.ImpactPoint);
-            //if we hit an enemy, deal damage
-            auto hitEnemy = Cast<ACSUEAICharacter>(Hit.GetActor());
-            if(hitEnemy && enemyType != hitEnemy->getEnemyTeam()){
-                hitEnemy->takeDamage(weaponDamage);
-            }
-            
-        }
-        
-    }
+	
     
 }
 
