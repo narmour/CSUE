@@ -38,8 +38,8 @@ void ACSUEGameManager::BeginPlay()
     
 
     auto myGM = (ACSUEGameMode*)GetWorld()->GetAuthGameMode();
-    if(myGM)
-        myGM->startRound();
+    //if(myGM)
+        //myGM->startRound();
     //initTeams();
     
     
