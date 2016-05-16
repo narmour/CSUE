@@ -35,11 +35,8 @@ class ACSUECharacter : public ACharacter
 
 	//Team character is on, hardcoded for CT, want to set with HUD?
     FString myTeam = FString(TEXT("T"));
-    //instance of the weapon
-	ACSUERifle *myRifle;
-	ACSUEShotgun *myShotgun;
-	//rifle is default starting weapon
-	FString currentWeapon = FString(TEXT("rifle"));
+   
+	
 	void switchWeapon();
     
     virtual void BeginPlay() override;
@@ -79,7 +76,15 @@ public:
     
     UFUNCTION(BlueprintPure,Category = "player")
     int32 getHealth() const;
-    
+	//rifle is default starting weapon
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+	FString currentWeapon = FString(TEXT("rifle"));
+
+	//instance of the weapon
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+		ACSUERifle *myRifle;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+		ACSUEShotgun *myShotgun;
 
     
 

@@ -16,7 +16,7 @@ public:
 	// Sets default values for this actor's properties
     AWeapon();
     //constructor for child classes
-	AWeapon(float wR,float wD,float wFR);
+	AWeapon(float wR,float wD,float wFR,float wMA);
 
 
 	// Called when the game starts or when spawned
@@ -43,7 +43,13 @@ public:
     float weaponRange;
     float weaponDamage;
     float weaponFireRate;
-    
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+	float maxAmmo;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+	float currentAmmo;
+
+	FTimerHandle reloadTimer;
+	//bool bReloading;
     //Functions to shoot a bullet and check what it hits
     void OnStartFire();
     void OnStopFire();
@@ -52,6 +58,7 @@ public:
     //subclass to only apply damage to enemy type of myPawn
     FString enemyType;
 	void shooting() { bShooting = false; OnStopFire(); };
+	void reload() { currentAmmo = maxAmmo; GetWorldTimerManager().ClearTimer(reloadTimer); };
 	bool bShooting = false;
     APawn *myPawn;
 	

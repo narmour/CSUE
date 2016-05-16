@@ -7,24 +7,31 @@
 
 
 
-ACSUEShotgun::ACSUEShotgun():AWeapon(9999.f,20.f,2.f) {
+ACSUEShotgun::ACSUEShotgun():AWeapon(9999.f,20.f,2.f,7.f) {
 	
 }
 
 
 void ACSUEShotgun::OnStartFire()
 {
-	if (!bShooting) {
-		UE_LOG(LogTemp, Warning, TEXT("ON START"));
+	if (!bShooting && currentAmmo >0) {
+		//UE_LOG(LogTemp, Warning, TEXT("ON START"));
 
 		bShooting = true;
 		ShootAC = PlayWeaponSound(FireLoopSound);
 		muzzlePSC = muzzleFlash(MuzzleFX);
 		WeaponTrace();
+		currentAmmo -= 1;
 		GetWorldTimerManager().SetTimer(shootingTimer, this, &AWeapon::shooting, weaponFireRate, false);
-
 	}
+	//if you outta bullets and havent started to reload yet
+	else if (!(currentAmmo > 0) && !(GetWorldTimerManager().IsTimerActive(reloadTimer))) {
+		GetWorldTimerManager().SetTimer(reloadTimer, this, &AWeapon::reload, 3.f, false);
+	}
+	
+
 }
+
 
 
 void ACSUEShotgun::WeaponTrace() {
@@ -58,7 +65,7 @@ void ACSUEShotgun::WeaponTrace() {
 		FHitResult Hit(ForceInit);
 		spread.X += FMath::FRandRange(-300, 300);
 		spread.Y += FMath::FRandRange(-300, 300);
-		spread.Z += FMath::FRandRange(-00, 300);
+		spread.Z += FMath::FRandRange(-300, 300);
 
 		GetWorld()->LineTraceSingleByObjectType(Hit, startPos, spread, FCollisionObjectQueryParams::AllObjects, traceParams);
 		if (Hit.bBlockingHit) {
