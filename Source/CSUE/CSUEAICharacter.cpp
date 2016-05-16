@@ -82,3 +82,12 @@ void ACSUEAICharacter::OnStopFire()
 {
 	myWeapon->OnStopFire();
 }
+
+FRotator ACSUEAICharacter::GetAimOffsets() const
+{
+	const FVector AimDirWS = GetBaseAimRotation().Vector();
+	const FVector AimDirLS = ActorToWorld().InverseTransformVectorNoScale(AimDirWS);
+	const FRotator AimRotLS = AimDirLS.Rotation();
+
+	return AimRotLS;
+}

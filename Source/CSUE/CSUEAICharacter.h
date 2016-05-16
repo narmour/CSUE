@@ -37,6 +37,10 @@ public:
 
 	//called when health is 0
 	void destroySelf();
+
+	UFUNCTION(BlueprintCallable, Category = "Game|Weapon")
+	FRotator GetAimOffsets() const;
+
 protected:
 	//character health
 	UPROPERTY(EditAnywhere, Category = "Gameplay")
