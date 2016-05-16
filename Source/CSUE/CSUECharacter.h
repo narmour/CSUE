@@ -64,6 +64,7 @@ public:
 	class UAnimMontage* FireAnimation;
     
     //function to return enemy type so weapon knows who the bad guys are
+	UFUNCTION(BlueprintCallable, Category = "Team")
     FString getEnemyTeam();
     
     UPROPERTY(EditAnywhere)
